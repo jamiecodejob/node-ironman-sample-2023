@@ -5,11 +5,12 @@ const bcrypt = require('bcryptjs')
 const router = express.Router();
 
 const key = 'Hexschool'
+const env = process.env;
 
 const users = {
-  "aaa@gmail.com": {
-    username: "123",
-    password: ''
+  [env.GMAIL_USER]: {
+    username: [env.NAME],
+    password: [env.PASSWORD]
   }
 }
 
