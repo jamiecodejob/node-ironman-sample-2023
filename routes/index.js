@@ -124,7 +124,7 @@ function createShaEncrypt(aesEncrypt) {
 
 // 對應文件 21, 22 頁：將 aes 解密
 function createSesDecrypt(TradeInfo) {
-  const decrypt = crypto.createDecipheriv('aes256', HASHKEY, HASHIV);
+  const decrypt = crypto.createDecipheriv('aes-256-cbc', HASHKEY, HASHIV);
   decrypt.setAutoPadding(false);
   const text = decrypt.update(TradeInfo, 'hex', 'utf8');
   const plainText = text + decrypt.final('utf8');
