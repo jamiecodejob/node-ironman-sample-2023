@@ -2,9 +2,8 @@ console.log('✅ routes/index.js 已載入');
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-if (!process.env.VERCEL) {
-  require('dotenv').config();
-}
+require('dotenv').config();
+
 const orders = {};
 
 console.log('🔍 DEBUG ENV CHECK');
