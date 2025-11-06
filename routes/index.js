@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-require('dotenv').config();
-
+if (process.env.VERCEL === undefined) {
+  require('dotenv').config();
+}
 const orders = {};
+
+console.log('🔍 DEBUG ENV CHECK');
+console.log('MerchantID:', process.env.MerchantID);
+console.log('HASHKEY:', process.env.HASHKEY ? '✅ loaded' : '❌ missing');
+console.log('HASHIV:', process.env.HASHIV ? '✅ loaded' : '❌ missing');
 
 const {
   MerchantID,
