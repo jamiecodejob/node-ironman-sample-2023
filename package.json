@@ -6,6 +6,9 @@
     "start": "node ./bin/www",
     "build": "echo 'skip build'"
   },
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
