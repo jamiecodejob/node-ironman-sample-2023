@@ -2,7 +2,7 @@ console.log('✅ routes/index.js 已載入');
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-if (process.env.VERCEL === undefined) {
+if (!process.env.VERCEL) {
   require('dotenv').config();
 }
 const orders = {};
@@ -152,5 +152,19 @@ function createSesDecrypt(TradeInfo) {
   const result = plainText.replace(/[\x00-\x20]+/g, '');
   return JSON.parse(result);
 }
+
+router.get('/env', (req, res) => {
+  const envCheck = {
+    MerchantID: process.env.MerchantID || '(undefined)',
+    HASHKEY: process.env.HASHKEY ? '✅ loaded' : '❌ missing',
+    HASHIV: process.env.HASHIV ? '✅ loaded' : '❌ missing',
+    Version: process.env.Version,
+    PayGateWay: process.env.PayGateWay,
+    NotifyUrl: process.env.NotifyUrl,
+    ReturnUrl: process.env.ReturnUrl,
+  };
+  console.log('🔍 Vercel env check:', envCheck);
+  res.json(envCheck);
+});
 
 module.exports = router;
