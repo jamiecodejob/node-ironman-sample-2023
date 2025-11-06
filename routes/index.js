@@ -1,3 +1,4 @@
+console.log('✅ routes/index.js 已載入');
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
