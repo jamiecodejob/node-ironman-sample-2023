@@ -1,8 +1,8 @@
-var createError = require('http-errors');
+var createError = require('http-errors');// 讓你建立 404/500 等 HTTP 錯誤
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var path = require('path');// 處理路徑
+var cookieParser = require('cookie-parser');// 能讀寫 cookie
+var logger = require('morgan');// API log（顯示 request 資訊）
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

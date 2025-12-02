@@ -2,6 +2,7 @@ import crypto from "crypto";
 import querystring from "querystring";
 
 // 🔧 關閉自動 body parser，手動處理 x-www-form-urlencoded
+
 export const config = {
   api: {
     bodyParser: false,
@@ -9,6 +10,31 @@ export const config = {
 };
 
 // 🔐 解密函式
+// crypto.createDecipheriv("aes-256-cbc", HASHKEY, HASHIV)
+// → 用藍新文件指定的演算法：AES-256-CBC
+// → 用你 .env 裡的 HASHKEY / HASHIV 當 key 和 iv
+
+// decrypt.setAutoPadding(false);
+// → 關閉自動 padding，因為藍新自己有特別的 padding 處理方式
+// → 後面要自己 replace 掉那些無用的字元
+
+// decrypt.update(TradeInfo, "hex", "utf8");
+// → TradeInfo 是「十六進位字串」
+// → 這裡把它解成 utf8 的原始字串（例如 {"Status":"SUCCESS","Result":...}）
+
+// plainText = text + decrypt.final("utf8");
+// → 把剩餘的解密資料補完
+
+// plainText.replace(/[\x00-\x20]+/g, "")
+// → 把 padding 出來的控制字元（0x00–0x20）全部去掉
+// → 才能變成乾淨的 JSON 字串
+
+// JSON.parse(resultText.trim())
+// → 把 JSON 字串轉回 JavaScript 物件
+
+// 如果 parse 失敗 → 印出原始字串，幫助 debug。
+
+// 這就是「官方文件 21–22 頁的 AES 解密流程」的 JS 實作版。
 function createSesDecrypt(TradeInfo) {
   const decrypt = crypto.createDecipheriv("aes-256-cbc", process.env.HASHKEY, process.env.HASHIV);
   decrypt.setAutoPadding(false);
@@ -34,6 +60,21 @@ export default async function handler(req, res) {
       req.on("end", resolve);
       req.on("error", reject);
     });
+
+    // rawBody：先準備一個空字串
+    // req.on("data", ...)：一包一包接收資料、累加到 rawBody
+    // req.on("end", ...)：收完了，Promise resolve
+    // 最後 querystring.parse(rawBody) 把它變成物件：
+    // 假設 rawBody 長這樣：
+    // Status=SUCCESS&TradeInfo=3f8abc...&TradeSha=ABCD1234...
+
+    // parse 完會變：
+
+    // {
+    //   Status: "SUCCESS",
+    //   TradeInfo: "3f8abc...",
+    //   TradeSha: "ABCD1234..."
+    // }
 
     // 將 body 解析為物件
     const body = querystring.parse(rawBody);

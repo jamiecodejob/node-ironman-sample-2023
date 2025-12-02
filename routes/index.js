@@ -1,10 +1,10 @@
 console.log('✅ routes/index.js 已載入');
 const express = require('express');
 const router = express.Router();
-const crypto = require('crypto');
+const crypto = require('crypto'); //（做金流 AES / SHA 用）
 require('dotenv').config();
 
-const orders = {};
+const orders = {}; //orders = 記憶體的暫存訂單
 
 console.log('🔍 DEBUG ENV CHECK');
 console.log('MerchantID:', process.env.MerchantID);
@@ -19,13 +19,14 @@ const {
   PayGateWay,
   NotifyUrl,
   ReturnUrl,
-} = process.env;
+} = process.env; // 讀 .env 裡的金流設定
 const RespondType = 'JSON';
 
 // 建立訂單
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
+// 建立訂單＋加密
 router.post('/createOrder', (req, res) => {
   const data = req.body;
   console.log(data);
